@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<wsdl:definitions
+     name="DepartmentFinderService"
+     targetNamespace="http://departmentdetailsservice/"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:tns="http://departmentdetailsservice/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+     xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+     xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" 
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+    >
+     <plnk:partnerLinkType name="DepartmentDetailsLink">
+        <plnk:role name="DetailsRequestor">
+            <plnk:portType name="tns:DepartmentFinder"/>
+        </plnk:role>
+        <plnk:role name="DetailsReponse">
+            <plnk:portType name="tns:DepartmentFinderResponse"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+    <wsdl:types>
+        <xs:schema version="1.0" targetNamespace="http://departmentdetailsservice/types" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:complexType name="faultBean">
+                <xs:sequence>
+                    <xs:element name="message" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="departmentDetails">
+                <xs:sequence>
+                    <xs:element name="departmentCostCenter" type="xs:string" minOccurs="0"/>
+                    <xs:element name="departmentManagerEmail" type="xs:string" minOccurs="0"/>
+                    <xs:element name="departmentName" type="xs:string" minOccurs="0"/>
+                    <xs:element name="departmentNumber" type="xs:string" minOccurs="0"/>
+                    <xs:element name="departmentOrg" type="xs:string" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema version="1.0" targetNamespace="http://departmentdetailsservice/" xmlns:ns1="http://departmentdetailsservice/types"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://departmentdetailsservice/">
+            <xs:import namespace="http://departmentdetailsservice/types"/>
+            <xs:element name="DepartmentFinderFault" nillable="true" type="ns1:faultBean"/>
+            <xs:complexType name="getDepartmentDetails">
+                <xs:sequence>
+                    <xs:element name="deptNumber" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getDepartmentDetails" type="ns2:getDepartmentDetails"/>
+            <xs:complexType name="getDepartmentDetailsResponse">
+                <xs:sequence>
+                    <xs:element name="return" type="ns1:departmentDetails"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getDepartmentDetailsResponse" type="ns2:getDepartmentDetailsResponse"/>
+            <xs:complexType name="getDepartmentByMgrEmailId">
+                <xs:sequence>
+                    <xs:element name="mgrEmailId" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getDepartmentByMgrEmailId" type="ns2:getDepartmentByMgrEmailId"/>
+            <xs:complexType name="getDepartments">
+                <xs:sequence/>
+            </xs:complexType>
+            <xs:element name="getDepartments" type="ns2:getDepartments"/>
+            <xs:complexType name="getDepartmentsResponse">
+                <xs:sequence>
+                    <xs:element name="return" minOccurs="0" maxOccurs="unbounded" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getDepartmentsResponse" type="ns2:getDepartmentsResponse"/>
+        </xs:schema>
+           
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://departmentdetailsservice/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://departmentdetailsservice/"
+             xmlns:ns1="http://departmentdetailsservice/types">
+            <import namespace="http://departmentdetailsservice/types"/>
+            <xsd:complexType name="getDepartmentByMgrCallback">
+                <xsd:sequence>
+                    <xsd:element name="departmentByMgrCallback" type="ns1:departmentDetails"/>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="getDepartmentByMgrCallback" type="tns:getDepartmentByMgrCallback"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="getDepartmentDetailsInput">
+        <wsdl:part name="parameters" element="tns:getDepartmentDetails"/>
+    </wsdl:message>
+    <wsdl:message name="getDepartmentDetailsOutput">
+        <wsdl:part name="parameters" element="tns:getDepartmentDetailsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="DepartmentFinderFault">
+        <wsdl:part name="DepartmentFinderFault" element="tns:DepartmentFinderFault"/>
+    </wsdl:message>
+    <wsdl:message name="getDepartmentByMgrEmailIdInput">
+        <wsdl:part name="parameters" element="tns:getDepartmentByMgrEmailId"/>
+    </wsdl:message>
+    <wsdl:message name="getDepartmentsInput">
+        <wsdl:part name="parameters" element="tns:getDepartments"/>
+    </wsdl:message>
+    <wsdl:message name="getDepartmentsOutput">
+        <wsdl:part name="parameters" element="tns:getDepartmentsResponse"/>
+    </wsdl:message>
+        <wsdl:message name="getDepartmentByMgrCallbackInput">
+        <wsdl:part name="parameters" element="tns:getDepartmentByMgrCallback"/>
+    </wsdl:message>
+    <wsdl:portType name="DepartmentFinder">
+        <wsdl:operation name="getDepartmentDetails">
+            <wsdl:input message="tns:getDepartmentDetailsInput" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action=""/>
+            <wsdl:output message="tns:getDepartmentDetailsOutput" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action=""/>
+            <wsdl:fault name="DepartmentFinderFault" message="tns:DepartmentFinderFault"/>
+        </wsdl:operation>
+        <wsdl:operation name="getDepartmentByMgrEmailId">
+            <wsdl:input message="tns:getDepartmentByMgrEmailIdInput" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action=""/>
+        </wsdl:operation>
+        <wsdl:operation name="getDepartments">
+            <wsdl:input message="tns:getDepartmentsInput" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action=""/>
+            <wsdl:output message="tns:getDepartmentsOutput" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action=""/>
+        </wsdl:operation>
+    </wsdl:portType>
+     <wsdl:portType name="DepartmentFinderResponse">
+        <wsdl:operation name="getDepartmentByMgrCallback">
+            <wsdl:input message="tns:getDepartmentByMgrCallbackInput" xmlns:ns1="http://www.w3.org/2006/05/addressing/wsdl"
+                 ns1:Action=""/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="DepartmentFinderSoapHttp" type="tns:DepartmentFinder">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="getDepartmentDetails">
+            <soap:operation soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="DepartmentFinderFault">
+                <soap:fault name="DepartmentFinderFault" use="literal" encodingStyle=""/>
+            </wsdl:fault>
+        </wsdl:operation>
+         <wsdl:operation name="getDepartmentByMgrEmailId">
+            <soap:operation soapAction="http://departmentdetailsservice/DepartmentFinder/getDepartmentByMgrEmailIdRequest"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getDepartments">
+            <soap:operation soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    
+    <wsdl:binding name="DepartmentFinderResponseSoapHttp" type="tns:DepartmentFinderResponse">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="getDepartmentByMgrCallback">
+            <soap:operation soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="DepartmentFinderService">
+        <wsdl:port name="DepartmentFinderPort" binding="tns:DepartmentFinderSoapHttp">
+            <soap:address location="http://localhost:7101/WebServiceExamples-DepartmentDetailsService-context-root/DepartmentFinderResponse"/>
+        </wsdl:port>
+        <wsdl:port name="DepartmentFinderCallbackPort" binding="tns:DepartmentFinderResponseSoapHttp">
+            <soap:address location="http://localhost:7101/WebServiceExamples-DepartmentDetailsService-context-root/DepartmentFinderService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

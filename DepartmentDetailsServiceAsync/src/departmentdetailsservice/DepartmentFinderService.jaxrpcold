@@ -1,0 +1,175 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<jdevws:WebService xmlns:jdevws="http://xmlns.oracle.com/jdeveloper/10130/webservice">
+   <list n="CHILD_NODES">
+      <url path="DepartmentFinder.java"/>
+      <url path="../../public_html/WEB-INF/wsdl/DepartmentFinderService.wsdl"/>
+   </list>
+   <hash n="DATA_MODEL">
+      <value n="ATTACHMENT_ENCODING" v="MTOM"/>
+      <list n="BD_">
+         <hash>
+            <value n="BOUND_PORT_TYPE" v="{USE_OWNER_TNS}DepartmentFinder"/>
+            <value n="DEFAULT_NAME" v="true"/>
+            <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPBinding"/>
+            <value n="NAME" v="{USE_OWNER_TNS}DepartmentFinder"/>
+            <list n="OP_BINDINGS">
+               <hash>
+                  <value n="BD_SOAP_ACTION" v=""/>
+                  <value n="BD_WSDL_RETURN_NAME" v="getDepartmentDetailsResponse"/>
+                  <value n="BD_WSDL_RETURN_TNS" v="USE_OWNER_TNS"/>
+                  <value n="BOUND_OPERATION" v="departmentdetailsservice.DepartmentDetails.getDepartmentDetails.java.lang.String"/>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash>
+                  <value n="BD_SOAP_ACTION" v=""/>
+                  <value n="BD_WSDL_RETURN_NAME" v="getDepartmentByMgrEmailIdResponse"/>
+                  <value n="BD_WSDL_RETURN_TNS" v="USE_OWNER_TNS"/>
+                  <value n="BOUND_OPERATION" v="departmentdetailsservice.DepartmentDetails.getDepartmentByMgrEmailId.java.lang.String"/>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash>
+                  <value n="BD_SOAP_ACTION" v=""/>
+                  <value n="BD_WSDL_RETURN_NAME" v="getDepartmentsResponse"/>
+                  <value n="BD_WSDL_RETURN_TNS" v="USE_OWNER_TNS"/>
+                  <value n="BOUND_OPERATION" v="void.getDepartments"/>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash>
+                  <value n="BD_SOAP_ACTION" v=""/>
+                  <value n="BD_WSDL_RETURN_NAME" v="getDepartmentsCallbackResponse"/>
+                  <value n="BD_WSDL_RETURN_TNS" v="USE_OWNER_TNS"/>
+                  <value n="BOUND_OPERATION" v="void.getDepartmentsCallback.java.util.List&lt;java.lang.String>"/>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPOperationBinding"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+            </list>
+            <hash n="PROPERTY_GROUPS"/>
+         </hash>
+      </list>
+      <value n="GENERATION_OPTION" v="ANNOTATIONS_WSDL"/>
+      <value n="GUID" v="0f8d67e2-0138-1000-8f96-7f0000013f52"/>
+      <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaWebService"/>
+      <list n="PO_">
+         <hash>
+            <value n="DEFAULT_NAME" v="false"/>
+            <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.SOAPPort"/>
+            <value n="NAME" v="DepartmentFinderResponse"/>
+            <value n="PORT_BINDING_NAME" v="{USE_OWNER_TNS}DepartmentFinder"/>
+            <list n="PORT_OPS">
+               <hash>
+                  <value n="EXPOSED_BD_OPERATION" v="departmentdetailsservice.DepartmentDetails.getDepartmentDetails.java.lang.String"/>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash>
+                  <value n="EXPOSED_BD_OPERATION" v="departmentdetailsservice.DepartmentDetails.getDepartmentByMgrEmailId.java.lang.String"/>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash>
+                  <value n="EXPOSED_BD_OPERATION" v="void.getDepartments"/>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash>
+                  <value n="EXPOSED_BD_OPERATION" v="void.getDepartmentsCallback.java.util.List&lt;java.lang.String>"/>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.PortOperation"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+            </list>
+            <hash n="PROPERTY_GROUPS"/>
+            <url n="URL" protocol="http" host="localhost" port="7101" path="/WebServiceExamples-DepartmentDetailsService-context-root/DepartmentFinderPort"/>
+         </hash>
+      </list>
+      <hash n="PROPERTY_GROUPS"/>
+      <list n="PT_">
+         <hash>
+            <value n="DEFAULT_NAME" v="true"/>
+            <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaPortType"/>
+            <value n="NAME" v="{USE_OWNER_TNS}DepartmentFinder"/>
+            <list n="OP_">
+               <hash>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaOperation"/>
+                  <list n="OP_JAVA_EXCEPTIONS">
+                     <string v="departmentdetailsservice.DepartmentFinderFault"/>
+                  </list>
+                  <value n="OP_JAVA_NAME" v="getDepartmentDetails"/>
+                  <list n="OP_JAVA_PARAMETERS">
+                     <hash>
+                        <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaParameter"/>
+                        <value n="NAME" v="deptNumber"/>
+                        <value n="PA_MODE" v="0"/>
+                        <value n="PA_WSDL_NAME" v="deptNumber"/>
+                        <value n="TARGET_NAMESPACE" v="USE_OWNER_TNS"/>
+                        <value n="TYPE" v="java.lang.String"/>
+                     </hash>
+                  </list>
+                  <value n="OP_JAVA_RETURN_TYPE" v="departmentdetailsservice.DepartmentDetails"/>
+                  <value n="OP_NAME" v="getDepartmentDetails"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaOperation"/>
+                  <list n="OP_JAVA_EXCEPTIONS">
+                     <string v="departmentdetailsservice.DepartmentFinderFault"/>
+                  </list>
+                  <value n="OP_JAVA_NAME" v="getDepartmentByMgrEmailId"/>
+                  <list n="OP_JAVA_PARAMETERS">
+                     <hash>
+                        <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaParameter"/>
+                        <value n="NAME" v="mgrEmailId"/>
+                        <value n="PA_MODE" v="0"/>
+                        <value n="PA_WSDL_NAME" v="mgrEmailId"/>
+                        <value n="TARGET_NAMESPACE" v="USE_OWNER_TNS"/>
+                        <value n="TYPE" v="java.lang.String"/>
+                     </hash>
+                  </list>
+                  <value n="OP_JAVA_RETURN_TYPE" v="departmentdetailsservice.DepartmentDetails"/>
+                  <value n="OP_NAME" v="getDepartmentByMgrEmailId"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaOperation"/>
+                  <value n="OP_JAVA_NAME" v="getDepartments"/>
+                  <value n="OP_JAVA_RETURN_TYPE" v="void"/>
+                  <value n="OP_NAME" v="getDepartments"/>
+                  <value n="OP_ONE_WAY_OPERATION" v="true"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+               <hash>
+                  <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaOperation"/>
+                  <value n="OP_JAVA_NAME" v="getDepartmentsCallback"/>
+                  <list n="OP_JAVA_PARAMETERS">
+                     <hash>
+                        <value n="MODEL_CLASS" v="oracle.jdeveloper.webservices.model.java.JavaParameter"/>
+                        <value n="NAME" v="depts"/>
+                        <value n="PA_WSDL_NAME" v="depts"/>
+                        <value n="TARGET_NAMESPACE" v="USE_OWNER_TNS"/>
+                        <value n="TYPE" v="java.util.List&lt;java.lang.String>"/>
+                     </hash>
+                  </list>
+                  <value n="OP_JAVA_RETURN_TYPE" v="void"/>
+                  <value n="OP_NAME" v="getDepartmentsCallback"/>
+                  <value n="OP_ONE_WAY_OPERATION" v="true"/>
+                  <hash n="PROPERTY_GROUPS"/>
+               </hash>
+            </list>
+            <hash n="PROPERTY_GROUPS"/>
+            <value n="PT_CLASS" v="departmentdetailsservice.DepartmentFinder"/>
+         </hash>
+      </list>
+      <url n="TARGET_PROJECT" path="../../DepartmentDetailsService.jpr"/>
+      <value n="WS_CREATE_ONEWAY_OPERATIONS" v="true"/>
+      <list n="WS_DEPENDENT_VALUE_TYPES"/>
+      <value n="WS_ORIG_GEN_DIRECTION" v="BOTTOM_UP"/>
+      <url n="WS_REFERENCE_WSDL" path="../../public_html/WEB-INF/wsdl/DepartmentFinderService.wsdl"/>
+      <value n="WS_TARGET_NAMESPACE" v="http://departmentdetailsservice/"/>
+      <value n="WS_URI" v="DepartmentFinderService"/>
+      <url n="WS_WSDL_FILE" path="../../public_html/WEB-INF/wsdl/DepartmentFinderService.wsdl"/>
+      <value n="WS_WSDL_LOC_ON_SEI" v="false"/>
+      <value n="WS_WSDL_LOC_VALUE" v="/WEB-INF/wsdl/DepartmentFinderService.wsdl"/>
+   </hash>
+</jdevws:WebService>

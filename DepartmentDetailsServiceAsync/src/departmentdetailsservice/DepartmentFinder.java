@@ -1,0 +1,301 @@
+package departmentdetailsservice;
+
+import com.sun.xml.ws.api.SOAPVersion;
+import com.sun.xml.ws.api.addressing.AddressingVersion;
+import com.sun.xml.ws.api.addressing.WSEndpointReference;
+import com.sun.xml.ws.api.message.HeaderList;
+
+import com.sun.xml.ws.api.message.Headers;
+import com.sun.xml.ws.developer.JAXWSProperties;
+
+import com.sun.xml.ws.developer.WSBindingProvider;
+
+import departmentdetailsservice.client.DepartmentsCallback;
+import departmentdetailsservice.client.ObjectFactory;
+
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.annotation.Resource;
+
+import javax.jws.HandlerChain;
+import javax.jws.Oneway;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
+
+import javax.xml.ws.EndpointReference;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.WebServiceException;
+import javax.xml.ws.soap.Addressing;
+
+
+/*
+ * The Department Finder class returns the details of a specified department
+ * @author Bob Webster
+ * @version 1.0, April 2012
+ *
+ * http://10.0.2.15:7001/WebServiceExamples-DepartmentDetailsServiceAsync-context-root/DepartmentFinderCallbackPort?wsdl
+ */
+
+
+@WebService(serviceName = "DepartmentFinderService",  targetNamespace = "http://departmentdetailsservice/",
+            portName = "DepartmentFinderPort", wsdlLocation = "/WEB-INF/wsdl/DepartmentFinderService.wsdl")
+public class DepartmentFinder {
+
+  @Resource
+      WebServiceContext context;
+  
+  HashMap<String, DepartmentDetails> departments;
+
+  public DepartmentFinder() {
+    super();
+    initialize();
+ 
+
+    // Set logger level for JAX-WS Client otherwise WSDL resolution may silently fail
+    // In addition to this call, add the following string -  departmentdetailsservice.client=Debug 
+    // to the "Logger Severity properties" field in wls console under server logging tab
+    Logger clientLogger = Logger.getLogger(departmentdetailsservice.client.DepartmentFinderService.class.getName());
+    clientLogger.setLevel(Level.WARNING);
+
+  
+  }
+
+  /*
+  * Initializes test data for departments 1,2 and 3
+  */
+  private void initialize() {
+    departments = new HashMap<String, DepartmentDetails>();
+    departments.put("1", new DepartmentDetails("1", "Accounts Payable", "44", "Finance", "joeBeen@westco.com"));
+    departments.put("2", new DepartmentDetails("2", "Inside Sales", "22", "Sales", "peterBaines@westco.com"));
+    departments.put("3", new DepartmentDetails("3", "Shipping", "45", "Logistics", "alGreen@westco.com"));
+    departments.put("4", new DepartmentDetails("4", "Legal", "80", "Legal", "sallyZink@westco.com"));
+    }
+
+  /*
+  * Returns  the details for the selected department
+  * @param   deptNumber   the department number
+  * @return  a DepartmentDetails object containing the department details for the selected department or null
+  */
+
+  @WebMethod
+  public DepartmentDetails getDepartmentDetails(@WebParam(name = "deptNumber")
+    String deptNumber) throws DepartmentFinderFault {
+
+    if(deptNumber == null || deptNumber.length() == 0)
+    {
+      FaultBean fb = new FaultBean();
+      fb.setMessage("Department number cannot be null");
+      throw new DepartmentFinderFault("Department number cannot null", fb);
+    }
+
+    // Simulate a system error using a special department number
+    if(deptNumber.equals("99"))
+    {
+        FaultBean fb = new FaultBean();
+        fb.setMessage("Department " + deptNumber + " not found");
+        throw new DepartmentFinderFault("System Error retrieving Department " + deptNumber, fb );
+    }
+
+    DepartmentDetails result = departments.get(deptNumber);
+
+    return result;
+  }
+
+
+    /*
+    * Returns  the details for the selected department
+    * @param   deptNumber   the department number
+    * @return  a DepartmentDetails object containing the department details for the selected department or null
+    */
+
+  @WebMethod
+  @Oneway
+  public void getDepartmentByMgrEmailId(@WebParam(name = "mgrEmailId")   String mgrEmailId)
+  {
+
+      DepartmentDetails department = new DepartmentDetails();
+      
+      HeaderList hl = (HeaderList)context.getMessageContext().get(
+                               JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
+      
+      // gets the replyTo addressing information in the SOAP header
+      WSEndpointReference reference = hl.getReplyTo(AddressingVersion.W3C,  SOAPVersion.SOAP_11);
+
+      Collection <DepartmentDetails> allDepts = departments.values();
+
+      for(DepartmentDetails dept : allDepts) {
+          if(dept.getDepartmentManagerEmail().toUpperCase().equals(String.valueOf(mgrEmailId.toUpperCase()))) {
+              department = dept;
+              break;
+          }
+      }
+  
+      doCallback(department);
+    }
+  
+  
+     
+     /*
+      * Callback
+      * Use the client generated by wsimport to callback the replyTo address passed in by the caller
+      */
+      
+      private void doCallback(DepartmentDetails dept) 
+      {
+        
+      HeaderList hl = (HeaderList)context.getMessageContext().get(
+                               JAXWSProperties.INBOUND_HEADER_LIST_PROPERTY);
+
+   
+      // get the replyTo addressing information in the SOAP header
+      WSEndpointReference reference = hl.getReplyTo(AddressingVersion.W3C,  SOAPVersion.SOAP_11);
+      
+      String messageId = hl.getMessageID(AddressingVersion.W3C, SOAPVersion.SOAP_11);
+      System.out.println("Message ID is " + messageId);
+      
+      try {   
+          departmentdetailsservice.client.DepartmentFinderService srv = new 
+                                          departmentdetailsservice.client.DepartmentFinderService();
+          
+          
+          departmentdetailsservice.client.DepartmentFinderResponse portType = srv.getDepartmentFinderCallbackPort();
+          
+          WSBindingProvider bp = (WSBindingProvider)portType;
+            
+          EndpointReference callbackRef =  bp.getEndpointReference();
+          System.out.println("Loaded Endpoint Address through wsdl: " + callbackRef.toString());
+            
+           
+           
+          // changing callback address to url specified by caller in replyTo header
+          bp.setAddress( reference.getAddress());
+          bp.setOutboundHeaders(Headers.create(AddressingVersion.W3C.relatesToTag,  messageId));   
+             
+          // Set relatesTo
+          bp.setOutboundHeaders(Headers.create(AddressingVersion.W3C.relatesToTag,
+                                               hl.getRelatesTo(AddressingVersion.W3C, SOAPVersion.SOAP_11)));
+           
+          // Get Reference Parameters sent by client and add to outbound headers
+          HeaderList replyToHeaderList = new HeaderList();
+          reference.addReferenceParameters(replyToHeaderList);
+          bp.setOutboundHeaders(replyToHeaderList);
+          
+          System.out.println("Calling " + reference.getAddress());
+          ObjectFactory factory = new ObjectFactory();
+          departmentdetailsservice.client.DepartmentDetails dd = factory.createDepartmentDetails();
+          dd.setDepartmentCostCenter(dept.getDepartmentCostCenter());
+          dd.setDepartmentManagerEmail(dept.getDepartmentManagerEmail());
+          dd.setDepartmentName(dept.getDepartmentName());
+          dd.setDepartmentNumber(dept.getDepartmentNumber());
+          dd.setDepartmentOrg(dept.getDepartmentOrg());
+          
+          portType.getDepartmentByMgrCallback(dd);
+        
+      } catch (WebServiceException ex) {
+       System.out.println("Error executing callback. " + ex.getMessage());
+       ex.printStackTrace();
+      }
+
+    }
+
+
+    /*
+        * Returns  a list of known department numbers
+        * @return  a string list containing known department numbers
+        */
+        public List<String>  getDepartments()  {
+
+           Set<String> keys = departments.keySet();
+           ArrayList<String> keyList = new ArrayList<String>();
+           keyList.addAll(keys);
+           return keyList;
+
+        }
+
+    /*
+    * A main() method that can be used for simple unit testing.
+    * The test can be run from the command line.
+    * It can also be run from within JDeveloper
+    * by right clicking on the DepartmentFinder.java node in the Application Navigator
+    * and choosing Run.
+    * The test output will appear in the JDeveloper log window
+    */
+
+  @WebMethod(exclude = true)
+  public static void main(String args[]) {
+
+      DepartmentFinder df = new DepartmentFinder();
+
+      try {
+
+        // Positive Test
+        System.out.println("Finding known department 2");
+        System.out.println(df.getDepartmentDetails("2"));
+        System.out.println("Test Passed" + "\n");
+
+        // Positive Test
+        System.out.println("Get all departments");
+        System.out.println(df.getDepartments());
+        System.out.println("Test Passed" + "\n");
+
+        // Disable, not capable of Async Test
+        // Positive Test
+   //     System.out.println("Get department by Manager");
+   //     DepartmentDetails dept1 = df.getDepartmentByMgrEmailId("peterBaines@westco.com");
+   //     if(dept1 == null)
+   //        System.out.println("Test Failed: Returned null for existing department.");
+   //     else {
+   //         System.out.println(dept1.toString());
+   //         System.out.println("Test Passed" + "\n");
+   //     }
+
+        // Negative Test
+        System.out.println("Finding unknown department 8");
+        DepartmentDetails dept2 = df.getDepartmentDetails("8");
+        if(dept2 == null)
+        {
+            System.out.println("Test Passed" + "\n");
+        }
+          else System.out.println("Test Failed, returned department for nonexistent department number" + "\n");
+
+        /// Disable, not capable of Async Test
+        // Negative Test
+  //      System.out.println("Get department using non-existent Manager");
+  //      DepartmentDetails dept3 = df.getDepartmentByMgrEmailId("yogiBear@westco.com");
+  //      if(dept3 != null)
+  //           System.out.println("Test Failed: Returned dept for non existent manager.");
+  //      else
+  //           System.out.println("Test Passed" + "\n");
+
+
+      }
+      catch (DepartmentFinderFault f1){
+            System.out.println("Caught Exception: "  + f1.getDescription());
+            System.out.println("Test Passed" + "\n");
+          }
+
+
+      try {
+          // Negative Test
+          System.out.println("Finding with null department");
+          System.out.println(df.getDepartmentDetails(null));
+          System.out.println("Test Failed" + "\n");
+      }
+
+      catch (DepartmentFinderFault f2){
+            System.out.println("Caught Exception: " + f2.getDescription());
+            System.out.println("Test Passed" + "\n");
+          }
+
+
+    }
+ 
+}

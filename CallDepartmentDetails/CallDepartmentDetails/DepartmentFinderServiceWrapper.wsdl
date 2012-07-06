@@ -1,0 +1,20 @@
+<?xml version= '1.0' encoding= 'UTF-8' ?>
+<wsdl:definitions
+     name="DepartmentFinderService"
+     targetNamespace="http://departmentdetailsservice/"
+     xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/"
+     xmlns:tns="http://departmentdetailsservice/"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    >
+    <plnk:partnerLinkType name="departmentDetailsSvc">
+        <plnk:role name="DepartmentFinderResponse">
+            <plnk:portType name="tns:DepartmentFinderResponse"/>
+        </plnk:role>
+        <plnk:role name="DepartmentFinder">
+            <plnk:portType name="tns:DepartmentFinder"/>
+        </plnk:role>
+    </plnk:partnerLinkType>
+    <wsdl:import namespace="http://departmentdetailsservice/" location="http://10.0.2.15:7001/WebServiceExamples-DepartmentDetailsServiceAsync-context-root/DepartmentFinderCallbackPort?wsdl"/>
+</wsdl:definitions>
